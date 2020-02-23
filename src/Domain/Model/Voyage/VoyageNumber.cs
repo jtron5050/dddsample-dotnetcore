@@ -5,9 +5,16 @@ namespace DDDSample.Domain.Model.Voyage
 {
     public class VoyageNumber : ValueObject
     {
+        public string Number { get; private set; }
+
+        public VoyageNumber(string number)
+        {
+            Number = number;
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
-            throw new System.NotImplementedException();
+            yield return Number;
         }
     }
 }

@@ -6,22 +6,25 @@ namespace DDDSample.Domain.Model.Voyage
 {
     public class CarrierMovement : ValueObject
     {
-        private int _departureLocationId;
-        private int _arrivalLocationId;
-        private DateTime _departureTime;
-        private DateTime _arrivalTime;
+        public int DepartureLocationId { get; private set; }
+        public int ArrivalLocationId { get; private set; }
+        public DateTime DepartureTime { get; private set; }
+        public DateTime ArrivalTime { get; private set; }
 
         public CarrierMovement(int departureLocationId, int arrivalLocationId, DateTime departureTime, DateTime arrivalTime)
         {
-            _departureLocationId = departureLocationId;
-            _arrivalLocationId = arrivalLocationId;
-            _departureTime = departureTime;
-            _arrivalTime = arrivalTime;
+            DepartureLocationId = departureLocationId;
+            ArrivalLocationId = arrivalLocationId;
+            DepartureTime = departureTime;
+            ArrivalTime = arrivalTime;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            throw new System.NotImplementedException();
+            yield return DepartureLocationId;
+            yield return ArrivalLocationId;
+            yield return DepartureTime;
+            yield return ArrivalTime;
         }
     }
 }
