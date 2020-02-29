@@ -13,7 +13,7 @@ namespace DDDSample.Domain.Model.Cargo
         public Cargo(string trackingId, int locationId, RouteSpecification routeSpecification, Itinerary itinerary, Delivery delivery)
         {
             TrackingId = trackingId;
-            LocationId = locationId;
+            LocationId = routeSpecification.OriginLocationId;
             RouteSpecification = routeSpecification;
             Itinerary = itinerary;
             Delivery = delivery;
