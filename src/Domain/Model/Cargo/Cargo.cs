@@ -1,3 +1,4 @@
+using DDDSample.Domain.Model.Handling;
 using Domain.Shared;
 
 namespace DDDSample.Domain.Model.Cargo
@@ -10,28 +11,30 @@ namespace DDDSample.Domain.Model.Cargo
         public Itinerary Itinerary { get; private set; }
         public Delivery Delivery { get; private set; }
 
-        public Cargo(string trackingId, int locationId, RouteSpecification routeSpecification, Itinerary itinerary, Delivery delivery)
+        public Cargo(string trackingId, int locationId, RouteSpecification routeSpecification, Itinerary itinerary)
         {
             TrackingId = trackingId;
             LocationId = routeSpecification.OriginLocationId;
             RouteSpecification = routeSpecification;
             Itinerary = itinerary;
-            Delivery = delivery;
+            Delivery = Delivery.DerivedFrom(routeSpecification, itinerary, HandlingHistory.Empty);
         }
 
         public void SpecifyNewRoute(in RouteSpecification routeSpecification)
         {
-            
+            RouteSpecification = routeSpecification;
+            Delivery = Delivery.UpdateOnRouting(RouteSpecification, Itinerary);
         }
 
         public void AssignToRoute(in Itinerary itinerary)
         {
-
+            Itinerary = itinerary;
+            Delivery = Delivery.UpdateOnRouting(RouteSpecification, Itinerary);
         }
 
         public void DeriveDeliveryProgress(in HandlingHistory handlingHistory)
         {
-            
+            Delivery = Delivery.DerivedFrom(RouteSpecification, Itinerary, handlingHistory);
         }
     }
 }

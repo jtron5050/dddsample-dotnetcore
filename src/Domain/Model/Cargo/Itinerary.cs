@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Shared;
 
 namespace DDDSample.Domain.Model.Cargo
@@ -9,32 +10,23 @@ namespace DDDSample.Domain.Model.Cargo
         private readonly List<Leg> _legs;
         public IReadOnlyCollection<Leg> Legs => _legs.AsReadOnly();
 
-        protected override IEnumerable<object> GetAtomicValues()
+        public Itinerary(List<Leg> legs)
         {
-            throw new NotImplementedException();
-        }
-    }
+            if (legs.Count == 0)
+                throw new ArgumentException();
 
-    public class Leg : ValueObject
-    {
-        public int VoyageId { get; private set; }
-        public int LoadLocationId { get; private set; }
-        public int UnloadLocationId { get; private set; }
-        public DateTime loadTime { get; private set; }
-        public DateTime UnloadTime { get; private set; }
+            if (legs.Any(leg => leg == null))
+                throw new ArgumentException();
 
-        public Leg(int voyageId, int loadLocationId, int unloadLocationId, DateTime loadTime, DateTime unloadTime)
-        {
-            VoyageId = voyageId;
-            LoadLocationId = loadLocationId;
-            UnloadLocationId = unloadLocationId;
-            this.loadTime = loadTime;
-            UnloadTime = unloadTime;
+            _legs = legs;
         }
 
+        public int InitialDepartureLocation => _legs.First().LoadLocationId;
+        public int FinalArrivialLocation => _legs.Last().UnloadLocationId;
+        
         protected override IEnumerable<object> GetAtomicValues()
         {
-            throw new NotImplementedException();
+            yield return _legs;
         }
     }
 }
